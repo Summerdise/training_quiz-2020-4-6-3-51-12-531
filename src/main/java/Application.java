@@ -48,7 +48,7 @@ public class Application {
   }
 
   public static String park(String carNumber) {
-    return "";
+    return new ParkingProcess().updateParking(carNumber);
   }
 
   public static String fetch(String ticket) {
