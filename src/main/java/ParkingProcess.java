@@ -187,20 +187,44 @@ public class ParkingProcess {
         return 0;
     }
 
+    public String getParkingLotName(int id){
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DbUtil.getConnection();
+            statement = connection.createStatement();
+            String sql = "SELECT park_name FROM total_parking" +
+                    " WHERE id="+id+";";
+            resultSet= statement.executeQuery(sql);
+            while(resultSet.next()){
+                return resultSet.getString("park_name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }finally {
+            DbUtil.releaseSource(connection,statement,resultSet);
+        }
+        return null;
+    }
+
     public String addParking(int id,String carNumber){
-        String parkingLotName =null;
+        String parkingChoose =null;
         if(id==1){
-            parkingLotName = "parking_one";
+            parkingChoose = "parking_one";
         }else if(id==2){
-            parkingLotName = "parking_two";
+            parkingChoose = "parking_two";
         }
         int maxParkingNum = getMaxParkingNum(id);
         int nowParkingNum = getNowParkingNum(id);
-        Map<Integer,String> statFromParkingLot = getStatFromParkingLot(parkingLotName);
+        String parkingLotName = getParkingLotName(id);
+        Map<Integer,String> statFromParkingLot = getStatFromParkingLot(parkingChoose);
         int finalNo=0;
         for(int i=1;i<=maxParkingNum;i++){
             if(!statFromParkingLot.containsKey(i)){
-                addJDBCProcess(parkingLotName,i,carNumber);
+                addJDBCProcess(parkingChoose,i,carNumber);
                 updateTotalTable(id,nowParkingNum+1);
                 finalNo = i;
                 break;
