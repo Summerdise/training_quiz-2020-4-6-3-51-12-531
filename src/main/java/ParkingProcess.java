@@ -276,4 +276,52 @@ public class ParkingProcess {
             DbUtil.releaseSource(connection,statement);
         }
     }
+
+    public int getParkingLotId(String parkingLotName){
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DbUtil.getConnection();
+            statement = connection.createStatement();
+            String sql = "SELECT id FROM total_parking" +
+                    " WHERE park_name='"+parkingLotName+"';";
+            resultSet= statement.executeQuery(sql);
+            while(resultSet.next()){
+                return resultSet.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }finally {
+            DbUtil.releaseSource(connection,statement,resultSet);
+        }
+        return 0;
+    }
+
+    public boolean isInParkingLot(int inputID,int inputNumber,String inputCarNumber){
+        String parkingChoose =null;
+        if(inputID==1){
+            parkingChoose = "parking_one";
+        }else if(inputID==2){
+            parkingChoose = "parking_two";
+        }
+        Map<Integer,String> statFromParkingLot = getStatFromParkingLot(parkingChoose);
+        return statFromParkingLot.containsKey(inputNumber)&&statFromParkingLot.get(inputNumber).equals(inputCarNumber);
+    }
+
+    public String takeOffCar(String input){
+        String[] inputList = input.split(",");
+        String parkingLotName = inputList[0];
+        int inputNumber = Integer.valueOf(inputList[1]);
+        String inputCarNumber = inputList[2];
+        int parkingLotId = getParkingLotId(parkingLotName);
+        if(isInParkingLot(parkingLotId,inputNumber,inputCarNumber)){
+            return String.format("已为您取到车牌号为%s的车辆，很高兴为您服务，祝您生活愉快！",inputCarNumber);
+        }else {
+            throw new InvalidTicketException("很抱歉，无法通过您提供的停车券为您找到相应的车辆，请您再次核对停车券是否有效！");
+        }
+    }
+
 }

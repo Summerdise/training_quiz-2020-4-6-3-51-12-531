@@ -52,7 +52,7 @@ public class Application {
   }
 
   public static String fetch(String ticket) {
-    return "";
+    return new ParkingProcess().takeOffCar(ticket);
   }
 
 }
