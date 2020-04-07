@@ -149,10 +149,33 @@ public class ParkingProcess {
             connection = DbUtil.getConnection();
             statement = connection.createStatement();
             String sql = "SELECT total_num FROM total_parking" +
-                    "WHERE id='"+id+"';";
+                    "WHERE id="+id+";";
             resultSet= statement.executeQuery(sql);
             while(resultSet.next()){
                 return resultSet.getInt("total_num");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }finally {
+            DbUtil.releaseSource(connection,statement,resultSet);
+        }
+        return 0;
+    }
+
+    public int getNowParkingNum(int id){
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = DbUtil.getConnection();
+            statement = connection.createStatement();
+            String sql = "SELECT now_num FROM total_parking" +
+                    "WHERE id="+id+";";
+            resultSet= statement.executeQuery(sql);
+            while(resultSet.next()){
+                return resultSet.getInt("now_num");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -172,11 +195,13 @@ public class ParkingProcess {
             parkingLotName = "parking_two";
         }
         int maxParkingNum = getMaxParkingNum(id);
+        int nowParkingNum = getNowParkingNum(id);
         Map<Integer,String> statFromParkingLot = getStatFromParkingLot(parkingLotName);
         int finalNo=0;
         for(int i=1;i<=maxParkingNum;i++){
             if(!statFromParkingLot.containsKey(i)){
                 addJDBCProcess(parkingLotName,i,carNumber);
+                updateTotalTable(id,nowParkingNum+1);
                 finalNo = i;
                 break;
             }
@@ -207,7 +232,25 @@ public class ParkingProcess {
         }finally {
             DbUtil.releaseSource(connection,statement);
         }
-
     }
 
+    public void updateTotalTable(int id,int nowNumber){
+        Connection connection = null;
+        Statement statement = null;
+        try {
+            connection = DbUtil.getConnection();
+            statement = connection.createStatement();
+            String sql = "UPDATE total_parking SET now_num=? WHERE id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(2,nowNumber);
+            preparedStatement.setInt(2,id);
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }finally {
+            DbUtil.releaseSource(connection,statement);
+        }
+    }
 }
