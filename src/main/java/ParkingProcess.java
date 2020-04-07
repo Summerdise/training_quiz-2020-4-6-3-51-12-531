@@ -289,6 +289,7 @@ public class ParkingProcess {
         String inputCarNumber = inputList[2];
         int parkingLotId = getParkingLotId(parkingLotName);
         if(isInParkingLot(parkingLotId,inputNumber,inputCarNumber)){
+            deleteJDBCProcess(parkingLotId,inputNumber);
             return String.format("已为您取到车牌号为%s的车辆，很高兴为您服务，祝您生活愉快！",inputCarNumber);
         }else {
             throw new InvalidTicketException("很抱歉，无法通过您提供的停车券为您找到相应的车辆，请您再次核对停车券是否有效！");
@@ -325,5 +326,24 @@ public class ParkingProcess {
         return statFromParkingLot.containsKey(inputNumber)&&statFromParkingLot.get(inputNumber).equals(inputCarNumber);
     }
 
-
+    public void deleteJDBCProcess(int inputID,int inputNumber){
+        String parkingChoose =getParkingChooseFromId(inputID);
+        Connection connection = null;
+        Statement statement = null;
+        try {
+            connection = DbUtil.getConnection();
+            statement = connection.createStatement();
+            String sql = "DELETE FROM " + parkingChoose+
+                    " WHERE no = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1,inputNumber);
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }finally {
+            DbUtil.releaseSource(connection,statement);
+        }
+    }
 }
