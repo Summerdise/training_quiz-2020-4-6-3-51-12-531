@@ -126,7 +126,7 @@ public class ParkingProcess {
             String sql = "SELECT * FROM " +tableName+";";
             resultSet= statement.executeQuery(sql);
             while(resultSet.next()){
-                int parkingId = resultSet.getInt("park_name");
+                int parkingId = resultSet.getInt("no");
                 String parkingNum = resultSet.getString("car_num");
                 returnMap.put(parkingId,parkingNum);
             }
@@ -149,7 +149,7 @@ public class ParkingProcess {
             connection = DbUtil.getConnection();
             statement = connection.createStatement();
             String sql = "SELECT total_num FROM total_parking" +
-                    "WHERE id="+id+";";
+                    " WHERE id="+id+";";
             resultSet= statement.executeQuery(sql);
             while(resultSet.next()){
                 return resultSet.getInt("total_num");
@@ -172,7 +172,7 @@ public class ParkingProcess {
             connection = DbUtil.getConnection();
             statement = connection.createStatement();
             String sql = "SELECT now_num FROM total_parking" +
-                    "WHERE id="+id+";";
+                    " WHERE id="+id+";";
             resultSet= statement.executeQuery(sql);
             while(resultSet.next()){
                 return resultSet.getInt("now_num");
@@ -218,12 +218,11 @@ public class ParkingProcess {
         try {
             connection = DbUtil.getConnection();
             statement = connection.createStatement();
-            String insertTotalTableSql = "INSERT INTO ?(no,car_num)" +
-                    "VALUES (?,?);";
+            String insertTotalTableSql = "INSERT INTO " +parkingLotName+
+                    " (no,car_num) VALUES (?,?);";
             PreparedStatement preparedStatement = connection.prepareStatement(insertTotalTableSql);
-            preparedStatement.setString(1,parkingLotName);
-            preparedStatement.setInt(2,no);
-            preparedStatement.setString(3,carNumber);
+            preparedStatement.setInt(1,no);
+            preparedStatement.setString(2,carNumber);
             preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -242,7 +241,7 @@ public class ParkingProcess {
             statement = connection.createStatement();
             String sql = "UPDATE total_parking SET now_num=? WHERE id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(2,nowNumber);
+            preparedStatement.setInt(1,nowNumber);
             preparedStatement.setInt(2,id);
             preparedStatement.execute();
         } catch (SQLException e) {
