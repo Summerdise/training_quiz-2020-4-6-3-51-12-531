@@ -43,8 +43,7 @@ public class Application {
 
   public static void init(String initInfo) {
     ParkingProcess parkingProcess = new ParkingProcess();
-    parkingProcess.init();
-    parkingProcess.initParkingSize(initInfo);
+    parkingProcess.initParkingLot(initInfo);
   }
 
   public static String park(String carNumber) {
