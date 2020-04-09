@@ -46,10 +46,8 @@ public class ParkingProcess {
                 break;
             }
         }
-        String returnStr = String.format("已将您的车牌号为%s的车辆停到%s停车场%d号车位，" +
-                        "停车券为：\"%s,%d,%s\"，请您妥善保存！"
-                , carNumber, parkingLotName, finalNo, parkingLotName, finalNo, carNumber);
-        return returnStr;
+        String parkingCard = String.format("%s,%d,%s",parkingLotName, finalNo, carNumber);
+        return parkingCard;
     }
 
     public String takeOffCar(String input) {
@@ -62,7 +60,7 @@ public class ParkingProcess {
             parkingRepository.deleteJDBCProcess(parkingLotId, inputNumber);
             int nowParkingNum = parkingRepository.getNowParkingNum(parkingLotId);
             parkingRepository.updateTotalTable(parkingLotId, nowParkingNum - 1);
-            return String.format("已为您取到车牌号为%s的车辆，很高兴为您服务，祝您生活愉快！", inputCarNumber);
+            return inputCarNumber;
         } else {
             throw new InvalidTicketException("很抱歉，无法通过您提供的停车券为您找到相应的车辆，请您再次核对停车券是否有效！");
         }
