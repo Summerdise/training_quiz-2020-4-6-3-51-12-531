@@ -47,18 +47,11 @@ public class Application {
   }
 
   public static String park(String carNumber) {
-    String parkingCard = new ParkingProcess().updateParking(carNumber);
-    String[] parkingDetail = parkingCard.split(",");
-    System.out.println(String.format("已将您的车牌号为%s的车辆停到%s停车场%s号车位，" +
-                    "停车券为：\"%s\"，请您妥善保存！"
-            , parkingDetail[0],parkingDetail[1],parkingDetail[2],parkingCard));
-    return parkingCard;
+    return new ParkingProcess().updateParking(carNumber);
   }
 
   public static String fetch(String ticket) {
-    String fetchDetail=new ParkingProcess().takeOffCar(ticket);
-    System.out.println(String.format("已为您取到车牌号为%s的车辆，很高兴为您服务，祝您生活愉快！", fetchDetail));
-    return fetchDetail;
+    return new ParkingProcess().takeOffCar(ticket);
   }
 
 }
