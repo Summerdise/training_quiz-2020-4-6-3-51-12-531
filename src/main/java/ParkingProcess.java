@@ -46,7 +46,7 @@ public class ParkingProcess {
                 break;
             }
         }
-        String parkingCard = String.format("%s,%d,%s",parkingLotName, finalNo, carNumber);
+        String parkingCard = String.format("%s,%d,%s", parkingLotName, finalNo, carNumber);
         return parkingCard;
     }
 

@@ -36,9 +36,7 @@ public class ParkingRepository {
                     "car_num VARCHAR(6));";
             preparedStatement = connection.prepareStatement(createSql);
             preparedStatement.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             DbUtil.releaseSource(connection, statement);
@@ -60,18 +58,16 @@ public class ParkingRepository {
                     "VALUES (1,?,?,null);";
             PreparedStatement preparedStatement = connection.prepareStatement(insertTotalTableSql);
             preparedStatement.setString(1, firstParking[0]);
-            preparedStatement.setInt(2, Integer.valueOf(firstParking[1]));
+            preparedStatement.setInt(2, Integer.parseInt(firstParking[1]));
             preparedStatement.execute();
 
             insertTotalTableSql = "INSERT INTO total_parking(id,park_name,total_num,now_num)" +
                     "VALUES (2,?,?,null);";
             preparedStatement = connection.prepareStatement(insertTotalTableSql);
             preparedStatement.setString(1, secondParking[0]);
-            preparedStatement.setInt(2, Integer.valueOf(secondParking[1]));
+            preparedStatement.setInt(2, Integer.parseInt(secondParking[1]));
             preparedStatement.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             DbUtil.releaseSource(connection, statement);
@@ -93,9 +89,7 @@ public class ParkingRepository {
                 int nowParking = resultSet.getInt("now_num");
                 return total == nowParking;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             DbUtil.releaseSource(connection, statement, resultSet);
@@ -119,9 +113,7 @@ public class ParkingRepository {
                 returnMap.put(parkingId, parkingNum);
             }
             return returnMap;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             DbUtil.releaseSource(connection, statement, resultSet);
@@ -142,9 +134,7 @@ public class ParkingRepository {
             while (resultSet.next()) {
                 return resultSet.getInt("total_num");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             DbUtil.releaseSource(connection, statement, resultSet);
@@ -165,9 +155,7 @@ public class ParkingRepository {
             while (resultSet.next()) {
                 return resultSet.getInt("now_num");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             DbUtil.releaseSource(connection, statement, resultSet);
@@ -188,9 +176,7 @@ public class ParkingRepository {
             while (resultSet.next()) {
                 return resultSet.getString("park_name");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             DbUtil.releaseSource(connection, statement, resultSet);
@@ -219,9 +205,7 @@ public class ParkingRepository {
             preparedStatement.setInt(1, no);
             preparedStatement.setString(2, carNumber);
             preparedStatement.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             DbUtil.releaseSource(connection, statement);
@@ -240,9 +224,7 @@ public class ParkingRepository {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, inputNumber);
             preparedStatement.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             DbUtil.releaseSource(connection, statement);
@@ -260,9 +242,7 @@ public class ParkingRepository {
             preparedStatement.setInt(1, nowNumber);
             preparedStatement.setInt(2, id);
             preparedStatement.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             DbUtil.releaseSource(connection, statement);
